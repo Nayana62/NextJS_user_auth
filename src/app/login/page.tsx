@@ -2,15 +2,29 @@
 import Link from "next/link";
 import React from "react";
 import { useRouter } from "next/navigation";
+import axios from "axios";
+import { ScaleLoader } from "react-spinners";
 
 export default function LoginPage() {
+  const router = useRouter();
   const [user, setUser] = React.useState({
     email: "",
     password: "",
   });
+  const [loading, setLoading] = React.useState(false);
 
-  const onLogin = (e: React.FormEvent<HTMLFormElement>) => {
+  const onLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    try {
+      setLoading(true);
+      const response = await axios.post("/api/users/login", user);
+      console.log(response.data);
+      router.push("/profile");
+    } catch (error: any) {
+      console.log(error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -38,7 +52,7 @@ export default function LoginPage() {
           type="submit"
           className=" border-none bg-cyan-950 p-2 rounded-lg"
         >
-          Login
+          {loading ? <ScaleLoader color="#36d7b7" height="20" /> : "Login"}
         </button>
         <div className=" flex gap-2 text-sm">
           <p>Don&apos;t have an account?</p>

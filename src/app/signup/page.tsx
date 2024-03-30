@@ -2,16 +2,32 @@
 import Link from "next/link";
 import React from "react";
 import { useRouter } from "next/navigation";
+import axios from "axios";
+import { ScaleLoader } from "react-spinners";
 
 export default function SignupPage() {
+  const router = useRouter();
   const [user, setUser] = React.useState({
     username: "",
     email: "",
     password: "",
   });
+  const [loading, setLoading] = React.useState(false);
 
-  const onSignup = (e: React.FormEvent<HTMLFormElement>) => {
+  // const [buttonDisabled, setButtonDisabled] = React.useState(false);
+
+  const onSignup = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    try {
+      setLoading(true);
+      const response = await axios.post("/api/users/signup", user);
+      console.log(response.data);
+      router.push("/login");
+    } catch (error: any) {
+      console.log(error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -21,6 +37,7 @@ export default function SignupPage() {
       <form onSubmit={(e) => onSignup(e)} className="flex flex-col gap-5">
         <input
           type="text"
+          required={true}
           className="p-2 border-none outline-none rounded-lg text-black"
           id="username"
           placeholder="username"
@@ -28,7 +45,8 @@ export default function SignupPage() {
           onChange={(e) => setUser({ ...user, username: e.target.value })}
         />
         <input
-          type="text"
+          type="email"
+          required={true}
           className="p-2 border-none outline-none rounded-lg text-black"
           id="email"
           placeholder="email"
@@ -36,7 +54,8 @@ export default function SignupPage() {
           onChange={(e) => setUser({ ...user, email: e.target.value })}
         />
         <input
-          type="text"
+          type="password"
+          required={true}
           className="p-2 border-none outline-none rounded-lg text-black"
           id="password"
           placeholder="password"
@@ -47,7 +66,7 @@ export default function SignupPage() {
           type="submit"
           className=" border-none bg-cyan-950 p-2 rounded-lg"
         >
-          Signup
+          {loading ? <ScaleLoader color="#36d7b7" height="20" /> : "Signup"}
         </button>
         <div className=" flex gap-2 text-sm">
           <p>Already have an account?</p>
