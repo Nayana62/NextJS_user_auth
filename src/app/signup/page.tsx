@@ -4,6 +4,7 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { ScaleLoader } from "react-spinners";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -14,17 +15,15 @@ export default function SignupPage() {
   });
   const [loading, setLoading] = React.useState(false);
 
-  // const [buttonDisabled, setButtonDisabled] = React.useState(false);
-
   const onSignup = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
       setLoading(true);
       const response = await axios.post("/api/users/signup", user);
-      console.log(response.data);
       router.push("/login");
+      toast.success(response.data.message, { position: "top-right" });
     } catch (error: any) {
-      console.log(error.message);
+      toast.error(error.response.data.error, { position: "top-right" });
     } finally {
       setLoading(false);
     }
@@ -75,6 +74,7 @@ export default function SignupPage() {
           </Link>
         </div>
       </form>
+      <Toaster />
     </div>
   );
 }

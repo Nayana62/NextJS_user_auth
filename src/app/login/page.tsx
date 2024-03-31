@@ -4,6 +4,7 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { ScaleLoader } from "react-spinners";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -18,10 +19,10 @@ export default function LoginPage() {
     try {
       setLoading(true);
       const response = await axios.post("/api/users/login", user);
-      console.log(response.data);
       router.push("/profile");
+      toast.success(response.data.message, { position: "top-right" });
     } catch (error: any) {
-      console.log(error.message);
+      toast.error(error.response.data.error, { position: "top-right" });
     } finally {
       setLoading(false);
     }
@@ -29,11 +30,12 @@ export default function LoginPage() {
 
   return (
     <div className="w-screen h-screen flex flex-col justify-center items-center">
-      <h1 className=" text-2xl font-semibold m-5">Signup</h1>
+      <h1 className=" text-2xl font-semibold m-5">Login</h1>
 
       <form onSubmit={(e) => onLogin(e)} className="flex flex-col gap-5">
         <input
           type="text"
+          required={true}
           className="p-2 border-none outline-none rounded-lg text-black"
           id="email"
           placeholder="email"
@@ -41,7 +43,8 @@ export default function LoginPage() {
           onChange={(e) => setUser({ ...user, email: e.target.value })}
         />
         <input
-          type="text"
+          type="password"
+          required={true}
           className="p-2 border-none outline-none rounded-lg text-black"
           id="password"
           placeholder="password"
@@ -61,6 +64,7 @@ export default function LoginPage() {
           </Link>
         </div>
       </form>
+      <Toaster />
     </div>
   );
 }

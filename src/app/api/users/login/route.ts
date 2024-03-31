@@ -15,7 +15,7 @@ export async function POST(request: NextRequest) {
     const user = await User.findOne({ email });
     if (!user) {
       return NextResponse.json(
-        { error: "User doesn't exists" },
+        { error: "User doesn't exist", showToast: true },
         { status: 400 }
       );
     }
@@ -23,7 +23,10 @@ export async function POST(request: NextRequest) {
     // check is password is correct or not
     const validPassword = await bcryptjs.compare(password, user.password);
     if (!validPassword) {
-      return NextResponse.json({ error: "Invalid password" }, { status: 400 });
+      return NextResponse.json(
+        { error: "Invalid password", showToast: true },
+        { status: 400 }
+      );
     }
 
     //create token data
