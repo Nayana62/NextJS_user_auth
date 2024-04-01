@@ -4,7 +4,7 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { ScaleLoader } from "react-spinners";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -21,9 +21,9 @@ export default function SignupPage() {
       setLoading(true);
       const response = await axios.post("/api/users/signup", user);
       router.push("/login");
-      toast.success(response.data.message, { position: "top-right" });
+      toast.success(response.data.message);
     } catch (error: any) {
-      toast.error(error.response.data.error, { position: "top-right" });
+      toast.error(error.response.data.error);
     } finally {
       setLoading(false);
     }
@@ -74,7 +74,6 @@ export default function SignupPage() {
           </Link>
         </div>
       </form>
-      <Toaster />
     </div>
   );
 }

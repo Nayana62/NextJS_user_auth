@@ -4,7 +4,7 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { ScaleLoader } from "react-spinners";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -20,9 +20,9 @@ export default function LoginPage() {
       setLoading(true);
       const response = await axios.post("/api/users/login", user);
       router.push("/profile");
-      toast.success(response.data.message, { position: "top-right" });
+      toast.success(response.data.message);
     } catch (error: any) {
-      toast.error(error.response.data.error, { position: "top-right" });
+      toast.error(error.response.data.error);
     } finally {
       setLoading(false);
     }
@@ -64,7 +64,9 @@ export default function LoginPage() {
           </Link>
         </div>
       </form>
-      <Toaster />
+      <Link href={"/forgotpassword"}>
+        <p className="text-slate-100 hover:underline mt-2">forgot password?</p>
+      </Link>
     </div>
   );
 }

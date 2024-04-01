@@ -4,7 +4,7 @@ import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import toast, { Toaster } from "react-hot-toast";
+import toast from "react-hot-toast";
 
 export default function ProfilePage() {
   const router = useRouter();
@@ -17,9 +17,9 @@ export default function ProfilePage() {
     try {
       const response = await axios.get("api/users/logout");
       router.push("/login");
-      toast.success(response.data.message, { position: "top-right" });
+      toast.success(response.data.message);
     } catch (error: any) {
-      toast.error(error.response.data.error, { position: "top-right" });
+      toast.error(error.response.data.error);
     }
   };
 
@@ -57,7 +57,6 @@ export default function ProfilePage() {
       >
         Get user Details
       </button>
-      <Toaster />
     </div>
   );
 }
